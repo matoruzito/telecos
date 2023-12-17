@@ -1,8 +1,6 @@
-# INDICADOR DE VERSION MANUAL: V1.0 
+# INDICADOR DE VERSION MANUAL: V1.1
 # LAST EDITOR: MATIAS
-
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 # This method returns two vectors.
@@ -32,7 +30,6 @@ def signal_triangulo(x_):
     return (1 - np.abs(x_))*(np.abs(x_) < 1)
 
 
-
 def signal_mensaje(t_, W_=1, M_=1):
     m = 2.0 * W_ * np.sinc(2.0 * W_ * t_) - W_ * np.sinc(W_ * t_)**2
     m = M_ * m / np.max(m)
@@ -47,11 +44,21 @@ def sys_hilbert(x_):
     return -1j*np.sign(x_)
 
 
+# Integrador discreto. Recibe el eje de tiempos y la señal discreta x
+def sys_integrador(t_, x_):
+    samplingTime = t_[1] - t_[0]
+    integral = np.zeros(np.size(t_))
+    integral[0] = x_[0] * samplingTime
+    for i in range(1, np.size(t_)):
+        integral[i] = integral[i-1] + x_[i] * samplingTime
+    return integral
+
+
 # Calcula la DEP de la secuencia x_ (Una realizacion)
-def get_dep(x_, samplingTime_): 
+def get_dep(x_, samplingTime_):
     numMuestras = len(x_)
     F, X = fourier(x_, 1 / samplingTime_)
-    dep = (1 / samplingTime_) **2 * np.abs(X) ** 2
+    dep = (1 / samplingTime_) ** 2 * np.abs(X) ** 2
     dep = samplingTime_ * dep / numMuestras
     return F, dep
 
@@ -66,5 +73,7 @@ def get_depEstimation(processName_, *args_, numSamples_, samplingTime_, numReali
     return F, depEstimada / numRealizations_
 
 # Función que genera una realización de ruido blanco
+
+
 def get_whiteNoiseRealization(numSamples_, n0_, samplingTime_):
     return np.sqrt(n0_ / samplingTime_) * np.random.randn(numSamples_)
