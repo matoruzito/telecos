@@ -1,2 +1,2 @@
 # telecos
-Telecos 23 Global repo
+Telecos 22 Global repo
