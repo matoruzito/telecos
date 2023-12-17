@@ -1,3 +1,6 @@
+# INDICADOR DE VERSION MANUAL: V1.0 
+# LAST EDITOR: MATIAS
+
 import numpy as np
 import matplotlib.pyplot as plt
 
